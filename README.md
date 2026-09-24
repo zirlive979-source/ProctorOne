@@ -20,27 +20,6 @@ proctorone-client/
 └── README.md
 ```
 
-## Cara menjalankan lokal
-
-Butuh server lokal (bukan buka file langsung via `file://`, karena Firebase Auth popup akan gagal):
-
-```bash
-cd proctorone-client
-npx serve .
-# atau: python3 -m http.server 5500
-```
-
-Buka `http://localhost:5500` (atau port yang muncul).
-
-## Wajib disetel di Firebase Console sebelum dipakai
-
-1. **Authentication → Sign-in method** → aktifkan provider **Google**.
-2. **Authentication → Settings → Authorized domains** → tambahkan domain tempat kamu deploy (contoh: `localhost`, `namadomainmu.com`, atau domain hosting pilihanmu). Tanpa ini, login Google akan gagal dengan error `auth/unauthorized-domain`.
-3. **Firestore Database** → buat database (mode production).
-4. **Firestore → Rules** → tempel isi `firestore.rules` di sini, lalu Publish. Aturan ini memastikan: user hanya bisa baca/tulis data miliknya sendiri, dan hanya kamu (lewat Console) yang bisa menulis ke koleksi `exams`.
-
-## Menambahkan soal ujian
-
 App membaca ujian dari koleksi `exams`. Belum ada panel admin di versi ini (sengaja tidak dibuat data palsu) — tambahkan manual:
 
 1. Firestore Database → Start collection → nama `exams`.
@@ -63,13 +42,6 @@ Dashboard otomatis menampilkan ujian sesuai jenjang yang dipilih user saat login
 - Timer countdown → habis waktu = otomatis dikumpulkan.
 - Auto-grading pilihan ganda, skor tersimpan ke `submissions`.
 
-## Deploy ke hosting
-
-Karena ini murni file statis, bisa langsung di-deploy ke:
-- **Firebase Hosting** (paling nyambung dengan project ini): `firebase init hosting` → `firebase deploy`
-- Netlify / Vercel / GitHub Pages (drag & drop folder ini)
-
-Ingat: domain hosting final wajib ditambahkan ke **Authorized domains** (langkah 2 di atas).
 
 ## Yang belum ada (di luar scope permintaan awal)
 
