@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ProctorOne Client</title>
+<meta name="description" content="ProctorOne Client (POC) — exam browser terkunci untuk ujian online SD, SMP, dan SMA/SMK.">
+
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icons/icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/icons/icon-16.png">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="screen-login" class="screen active">
+  <div class="login-card">
+    <div class="brand-row">
+      <div class="brand-mark"><img src="assets/logo.png" alt="Logo ProctorOne"></div>
+      <div><div class="brand-name">ProctorOne Client</div><div class="brand-sub">POC — Exam Browser</div></div>
+    </div>
+    <h1 class="login-title">Masuk untuk memulai sesi ujian terkunci</h1>
+    <p class="login-desc">Pilih jenjang lalu masuk dengan akun Google. Sesi akan berjalan dalam mode terkunci: layar penuh wajib, tidak boleh berpindah tab, dan tidak bisa menyalin teks.</p>
+    <div class="level-picker" id="levelPicker">
+      <div class="level-opt" data-level="SD">SD<small>Kelas 1–6</small></div>
+      <div class="level-opt" data-level="SMP">SMP<small>Kelas 7–9</small></div>
+      <div class="level-opt" data-level="SMA">SMA/SMK<small>Kelas 10–12</small></div>
+    </div>
+    <button class="btn-google" id="btnGoogle">
+      <svg width="17" height="17" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.83.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.9v2.33A9 9 0 009 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 013.68 9c0-.59.1-1.17.27-1.7V4.97H.9A9 9 0 000 9c0 1.45.35 2.83.9 4.03l3.05-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 00.9 4.97l3.05 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+      Login dengan Google
+    </button>
+    <div class="login-msg" id="loginMsg"></div>
+    <p class="login-foot">Progres jawaban tersimpan otomatis ke akun Google Anda selama ujian berlangsung.</p>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="screen-dashboard" class="screen">
+  <div class="topbar">
+    <div class="who">Masuk sebagai <b id="whoName">—</b></div>
+    <button class="btn-ghost" id="btnLogout">Keluar</button>
+  </div>
+  <div class="dash-body">
+    <div class="dash-head">
+      <h2>Ujian tersedia — <span id="dashLevel">SD</span></h2>
+      <p>Pilih ujian di bawah untuk memulai sesi terkunci. Ujian tidak bisa dijeda setelah dimulai.</p>
+    </div>
+    <div id="examList"><div class="empty-state">Memuat daftar ujian…</div></div>
+  </div>
+</section>
+
+<!-- EXAM -->
+<section id="screen-exam" class="screen">
+  <div class="lock-top">
+    <div class="lock-status"><span class="dot"></span><span>Mode Terkunci Aktif</span></div>
+    <div class="strike-wrap" id="strikeWrap" title="Pelanggaran"></div>
+    <div class="timer mono-num" id="timerDisplay">--:--</div>
+  </div>
+  <div class="exam-body">
+    <div class="q-wrap">
+      <div class="q-progress" id="qProgress">Soal 1 dari 1</div>
+      <h3 class="q-text" id="qText">—</h3>
+      <div id="qOptions"></div>
+    </div>
+  </div>
+  <div class="exam-nav">
+    <button class="nav-btn" id="btnPrev">Sebelumnya</button>
+    <button class="nav-btn primary" id="btnNext">Berikutnya</button>
+    <button class="nav-btn submit" id="btnSubmit" style="display:none">Kumpulkan</button>
+  </div>
+  <div class="lock-overlay" id="lockOverlay">
+    <h3>Kembali ke mode layar penuh</h3>
+    <p>Ujian terdeteksi keluar dari layar penuh. Ini dicatat sebagai pelanggaran. Tekan tombol di bawah untuk melanjutkan.</p>
+    <button class="nav-btn primary" id="btnRefocus" style="max-width:220px">Lanjutkan Ujian</button>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="screen-result" class="screen">
+  <div class="result-card">
+    <div class="result-label" id="resultTitle">Ujian selesai</div>
+    <div class="result-score mono-num" id="resultScore">0</div>
+    <div class="result-label" id="resultSub">dari 100 poin</div>
+    <div class="result-row"><span>Pelanggaran tercatat</span><span id="resultStrikes">0</span></div>
+    <div class="result-row"><span>Dikumpulkan otomatis</span><span id="resultAuto">Tidak</span></div>
+    <button class="btn-google" id="btnBackDash" style="margin-top:26px">Kembali ke Beranda</button>
+  </div>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK (compat build, kompatibel dengan config v9+ yang kamu berikan) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
